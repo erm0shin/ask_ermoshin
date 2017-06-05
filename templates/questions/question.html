@@ -1,0 +1,89 @@
+{% extends "questions/base.html" %}
+{% load static %}
+
+{% block content %}
+
+        <div class="row" style="margin-bottom: 20px">
+            <div class="col-sm-1 col-sm-offset-1">
+                <img class="avatar" src="{% static "images/noavatar.png" %}">
+            </div>
+            <div class="col-sm-10">
+                <div style="font-size: 180%" role="presentation">
+{#                    <a href="#">{{ question_title }}</a>#}
+                    <p>{{ question_title }}</p>
+                </div>
+                <p>{{ text }}</p>
+                <div class="row">
+                    <div class="col-sm-1">Tags:</div>
+                    <div class="col-sm-10" style="margin-left: -10px">
+                        {% for tag in tags %}
+                            <a href="#">{{ tag }}&nbsp;</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        {% for answer_title in answer_titles %}
+        <div class="jumbotron">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <img class="avatar" src="{% static "images/noavatar.png" %}">
+                    </div>
+                    <div class="col-sm-8">
+                        <div style="font-size: 180%" role="presentation">
+                            <a href="#">{{ answer_title }}</a>
+                        </div>
+                        <p>
+                            {{ text }}
+                        </p>
+                        <div class="row">
+{#                            <div class="col-sm-3" role="presentation"><a href="#">answers ({{ range|random }})</a></div>#}
+                            <div class="col-sm-1">Tags:</div>
+                            <div class="col-sm-7" style="margin-left: 10px">
+                                {% for tag in tags %}
+                                    <a href="/tag">{{ tag }}&nbsp;</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 pull-right">
+                        <a href="#" class="pull-right">
+                            <span class="glyphicon glyphicon-plus text-success" aria-hidden="true"></span>
+                        </a>
+                        <span class="pull-right">&nbsp; &nbsp; {{ range|random }} &nbsp; &nbsp;</span>
+                        <a href="#" class="pull-right">
+                            <span class="glyphicon glyphicon-minus text-danger" aria-hidden="true"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Ошибка</h3>
+                </div>
+                <div class="panel-body">
+                    <p>Ответы не найдены.</p>
+                </div>
+            </div>
+        {% endfor %}
+
+        <hr />
+
+        <form>
+            <div class="form-group">
+                <textarea class="form-control" rows="5" id="comment" maxlength="5000" placeholder="Enter your answer here..." style="resize: none"></textarea>
+            </div>
+            <button type="button" class="btn btn-lg btn-default" style="margin-bottom: 40px">Answer</button>
+        </form>
+
+    {% include "questions/paginate.html" %}
+
+{% endblock %}

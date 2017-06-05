@@ -1,0 +1,39 @@
+{% extends "questions/base.html" %}
+{% load static %}
+
+{% block content %}
+
+        <div class="row" style="margin-bottom: 20px; font-size: 200%">
+            <div class="col-sm-12"><p>Log In</p></div>
+        </div>
+
+        <div class="alert alert-danger" role="alert">Sorry, such user doesn't exist!</div>
+        <div class="alert alert-danger" role="alert">Sorry, wrong password!</div>
+
+        <form class="form-signin">
+            <div class="row" style="margin-bottom: 25px">
+                <div class="col-sm-2">
+                    <p style="font-size: 150%">Email</p>
+                </div>
+                <div class="col-sm-6">
+                    <label for="inputEmail" class="sr-only">Email address</label>
+                    <input type="email" id="inputEmail" class="form-control" placeholder="dr.pepper@mail.ru" required="" autofocus="" maxlength="100">
+                </div>
+            </div>
+
+            <div class="row" style="margin-bottom: 25px">
+                <div class="col-sm-2">
+                    <p style="font-size: 150%">Password</p>
+                </div>
+                <div class="col-sm-6">
+                    <label for="inputPassword" class="sr-only">Password</label>
+                    <input type="password" id="inputPassword" class="form-control" required="" maxlength="100">
+                </div>
+            </div>
+
+            <div class="col-sm-offset-2 col-sm-3">
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Log in!</button>
+            </div>
+        </form>
+
+{% endblock %}

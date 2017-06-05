@@ -1,0 +1,115 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static "bootstrap/css/bootstrap.css" %}">
+    <link rel="stylesheet" href="{% static "my_style.css" %}">
+</head>
+<body class="container">
+
+<div class="page-header">
+    <div class="container-fluid">
+        <div class="col-sm-2">
+            <div class="navbar-header">
+                {% url 'new_questions' as the_url %}
+                <a class="navbar-brand" href="{{ the_url }}">
+                    <img alt="Brand" class="img_brand" src="{% static "images/Ask-me.jpg" %}">
+                </a>
+            </div>
+        </div>
+
+        <div class="col-sm-5">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for..." maxlength="50">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">Search!</button>
+                </span>
+            </div><!-- /input-group -->
+        </div>
+
+        <div class="col-sm-1">
+            {% if user_loged_in %}
+                {% url 'ask' as url0 %}
+                <a href="{{ url0 }}">
+                    <button type="button" class="btn btn-success">Ask!</button>
+                </a>
+            {% endif %}
+        </div>
+
+        {% if user_loged_in %}
+        <div class="col-sm-1">
+            <img class="img_myavatar" src="{% static "images/noavatar.png" %}">
+        </div>
+
+        <div class="col-sm-offset-10">
+            <div class="col-sm-offset-1">
+                <span > Dr. Pepper </span>
+            </div>
+            {% url 'settings' as the_url %}
+            <ul class="nav nav-pills">
+                <li role="presentation"><a href="{{ the_url }}">Settings</a></li>
+                <li role="presentation"><a href="#">Log out</a></li>
+            </ul>
+        </div>
+
+        {% else %}
+            {% url 'login' as url1 %}
+            {% url 'signup' as url2 %}
+            <div class="col-sm-offset-10">
+                <ul class="nav nav-pills">
+                    <li role="presentation"><a href="{{ url1 }}">Log in</a></li>
+                    <li role="presentation"><a href="{{ url2 }}">Register</a></li>
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-8 blog-main">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+
+    <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+        <div style="font-size: 200%" style="margin-bottom: 100px">
+            <p>Popular Tags</p>
+        </div>
+{#        <div role="presentation" style="margin-bottom: 30px">#}
+{#            <a href="#" style="margin-right: 10px">perl</a>#}
+{#            <a href="#" style="margin-right: 10px">python</a>#}
+{#            <a href="#" style="margin-right: 10px">TechPark</a>#}
+{#            <a href="#" style="margin-right: 10px">MySQL</a>#}
+{#            <a href="#" style="margin-right: 10px">django</a>#}
+{#            <a href="#" style="margin-right: 10px">mail.ru</a>#}
+{#            <a href="#" style="margin-right: 10px">google</a>#}
+{#        </div>#}
+        <div role="presentation" style="margin-bottom: 30px">
+            {% for tag in popular_tags %}
+                <a href="/tag" style="margin-right: 10px">{{ tag }}</a> <br />
+            {% endfor %}
+        </div>
+
+        <div style="font-size: 200%" style="margin-bottom: 100px">
+            <p>Best Members</p>
+        </div>
+        <div role="presentation">
+{#            <a href="#" style="margin-right: 10px">Mr. Freeman</a> <br />#}
+{#            <a href="#" style="margin-right: 10px">Dr. House</a> <br />#}
+{#            <a href="#" style="margin-right: 10px">Bender</a> <br />#}
+{#            <a href="#" style="margin-right: 10px">Queen Victoria</a> <br />#}
+{#            <a href="#" style="margin-right: 10px">V. Pupkin</a> <br />#}
+            {% for user in best_users %}
+                <a href="#" style="margin-right: 10px">{{ user }}</a> <br />
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

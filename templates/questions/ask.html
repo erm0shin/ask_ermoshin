@@ -1,0 +1,38 @@
+{% extends "questions/base.html" %}
+{% load static %}
+
+{% block content %}
+
+        <div style="font-size: 200%; margin-bottom: 25px">New Question</div>
+        <form>
+            <div class="row" style="margin-bottom: 25px">
+                <div class="col-sm-1">
+                    <p style="font-size: 150%">Title</p>
+                </div>
+                <div class="col-sm-offset1 col-sm-10">
+                    <input type="text" class="form-control" aria-describedby="text_title" maxlength="100">
+                </div>
+            </div>
+
+            <div class="row" style="margin-bottom: 25px">
+                <div class="col-sm-1">
+                    <p style="font-size: 150%">Text</p>
+                </div>
+                <div class="col-sm-10">
+                    <textarea class="form-control" id="question_text" rows="15" maxlength="5000" style="resize: none"></textarea>
+                </div>
+            </div>
+
+            <div class="row" style="margin-bottom: 25px">
+                <div class="col-sm-1">
+                    <p style="font-size: 150%">Tags</p>
+                </div>
+                <div class="col-sm-offset1 col-sm-10">
+                    <input type="text" class="form-control" aria-describedby="text_tags" maxlength="100">
+                </div>
+            </div>
+
+            <button type="button" class="col-sm-offset-1 btn btn-lg btn-default" style="margin-bottom: 40px">Ask!</button>
+        </form>
+
+{% endblock %}

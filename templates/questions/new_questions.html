@@ -1,0 +1,84 @@
+{% extends "questions/base.html" %}
+{% load static %}
+
+{% block content %}
+
+        <div class="row" style="margin-bottom: 30px">
+            <div class="col-sm-8">
+                <div class="row">
+                    <div style="font-size: 200%" class="col-sm-5">{{ header }}</div>
+                    {% if id == 3 %}
+                        <div style="font-size: 200%" class="col-sm-7">{{ tag }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div style="font-size: 120%; margin-top: 10px">
+                    {% if id != 1 %}
+                                {% url "new_questions" as new %}
+                                <div role="presentation" class="pull-right"><a href="{{ new }}">New Questions</a></div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div style="font-size: 120%; margin-top: 10px">
+                    {% if id != 2 %}
+                        {% url "hot_questions" as hot %}
+                        <div role="presentation" class="pull-right"><a href="{{ hot }}">Hot Questions</a></div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {% for question_title in question_titles %}
+        <div class="jumbotron">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <img class="avatar" src="{% static "images/noavatar.png" %}">
+                    </div>
+                    <div class="col-sm-8">
+                        <div style="font-size: 180%" role="presentation">
+                            <a href="/question">{{ question_title }}</a>
+                        </div>
+                        <p>
+                            {{ text }}
+                        </p>
+                        <div class="row">
+                            <div class="col-sm-3" role="presentation"><a href="/question">answers ({{ range|random }})</a></div>
+                            <div class="col-sm-1">Tags:</div>
+                            <div class="col-sm-7" style="margin-left: 10px">
+                                {% for tag in tags %}
+                                    <a href="/tag">{{ tag }}&nbsp;</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 pull-right">
+                        <a href="#" class="pull-right">
+                            <span class="glyphicon glyphicon-plus text-success" aria-hidden="true"></span>
+                        </a>
+                        <span class="pull-right">&nbsp; &nbsp; {{ range|random }} &nbsp; &nbsp;</span>
+                        <a href="#" class="pull-right">
+                            <span class="glyphicon glyphicon-minus text-danger" aria-hidden="true"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Ошибка</h3>
+                </div>
+                <div class="panel-body">
+                    <p>Вопросы не найдены.</p>
+                </div>
+            </div>
+        {% endfor %}
+
+    {% include "questions/paginate.html" %}
+
+{% endblock %}

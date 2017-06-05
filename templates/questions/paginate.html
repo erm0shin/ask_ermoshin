@@ -1,0 +1,40 @@
+{% url this_url as the_url %}
+        <nav aria-label="Page navigation" class="text-center">
+            <ul class="pagination">
+                {% if current_page > 1 %}
+                    <li>
+                        <a href="?page={{ current_page|add:"-1" }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% for i in num_pages %}
+{#                    {% url this_url page=forloop.counter as the_url2 %}#}
+                    {% if i == current_page|add:"-1" %}
+                        <li class="active">
+{#                            <a href="/?page={{ forloop.counter }}">{{ forloop.counter }}</a>#}
+                            <a href="{{ the_url }}?page={{ forloop.counter }}">{{ forloop.counter }}</a>
+{#                            <a href="{{ the_url2 }}">{{ forloop.counter }}</a>#}
+                        </li>
+                    {% else %}
+                        <li>
+{#                            <a href="/?page={{ forloop.counter }}">{{ forloop.counter }}</a>#}
+                            <a href="{{ the_url }}?page={{ forloop.counter }}">{{ forloop.counter }}</a>
+{#                            <a href="{{ the_url2 }}">{{ forloop.counter }}</a>#}
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if current_page < num_pages|length %}
+                    <li>
+{#                        <a href="/?page={{ current_page|add:"1" }}" aria-label="Next">#}
+                        <a href="{{ the_url }}?page={{ current_page|add:"1" }}" aria-label="Next">
+{#                        {% url this_url page=current_page|add:"1" as the_url3 %}#}
+{#                        <a href="{{ the_url3 }}" aria-label="Next">#}
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
