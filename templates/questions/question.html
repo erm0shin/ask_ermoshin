@@ -5,7 +5,8 @@
 
         <div class="row" style="margin-bottom: 20px">
             <div class="col-sm-1 col-sm-offset-1">
-                <img class="avatar" src="{% static "images/noavatar.png" %}">
+{#                <img class="avatar" src="{% static "images/noavatar.png" %}">#}
+                <img class="avatar" src="/images/noavatar.png">
             </div>
             <div class="col-sm-10">
                 <div style="font-size: 180%" role="presentation">
@@ -26,12 +27,14 @@
 
         <hr />
 
-        {% for answer_title in answer_titles %}
+{#        {% for answer_title in answer_titles %}#}
+        {% for answer_title in question_titles %}
         <div class="jumbotron">
             <div class="container">
                 <div class="row">
                     <div class="col-sm-2">
-                        <img class="avatar" src="{% static "images/noavatar.png" %}">
+{#                        <img class="avatar" src="{% static "images/noavatar.png" %}">#}
+                        <img class="avatar" src="/images/noavatar.png">
                     </div>
                     <div class="col-sm-8">
                         <div style="font-size: 180%" role="presentation">
@@ -51,17 +54,17 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-sm-12 pull-right">
-                        <a href="#" class="pull-right">
-                            <span class="glyphicon glyphicon-plus text-success" aria-hidden="true"></span>
-                        </a>
-                        <span class="pull-right">&nbsp; &nbsp; {{ range|random }} &nbsp; &nbsp;</span>
-                        <a href="#" class="pull-right">
-                            <span class="glyphicon glyphicon-minus text-danger" aria-hidden="true"></span>
-                        </a>
-                    </div>
-                </div>
+{#                <div class="row">#}
+{#                    <div class="col-sm-12 pull-right">#}
+{#                        <a href="#" class="pull-right">#}
+{#                            <span class="glyphicon glyphicon-plus text-success" aria-hidden="true"></span>#}
+{#                        </a>#}
+{#                        <span class="pull-right">&nbsp; &nbsp; {{ range|random }} &nbsp; &nbsp;</span>#}
+{#                        <a href="#" class="pull-right">#}
+{#                            <span class="glyphicon glyphicon-minus text-danger" aria-hidden="true"></span>#}
+{#                        </a>#}
+{#                    </div>#}
+{#                </div>#}
             </div>
         </div>
         {% empty %}

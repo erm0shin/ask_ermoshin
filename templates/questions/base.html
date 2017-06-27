@@ -5,8 +5,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="{% static "bootstrap/css/bootstrap.css" %}">
-    <link rel="stylesheet" href="{% static "my_style.css" %}">
+{#    <link rel="stylesheet" href="{% static "bootstrap/css/bootstrap.css" %}">#}
+{#    <link rel="stylesheet" href="{% static "my_style.css" %}">#}
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="/my_style.css">
 </head>
 <body class="container">
 
@@ -16,7 +18,8 @@
             <div class="navbar-header">
                 {% url 'new_questions' as the_url %}
                 <a class="navbar-brand" href="{{ the_url }}">
-                    <img alt="Brand" class="img_brand" src="{% static "images/Ask-me.jpg" %}">
+{#                    <img alt="Brand" class="img_brand" src="{% static "images/Ask-me.jpg" %}">#}
+                    <img alt="Brand" class="img_brand" src="/images/Ask-me.jpg">
                 </a>
             </div>
         </div>
@@ -41,7 +44,8 @@
 
         {% if user_loged_in %}
         <div class="col-sm-1">
-            <img class="img_myavatar" src="{% static "images/noavatar.png" %}">
+{#            <img class="img_myavatar" src="{% static "images/noavatar.png" %}">#}
+            <img class="img_myavatar" src="/images/noavatar.png">
         </div>
 
         <div class="col-sm-offset-10">
@@ -58,6 +62,7 @@
         {% else %}
             {% url 'login' as url1 %}
             {% url 'signup' as url2 %}
+{#            <img class="img_myavatar" src="{% static "images/noavatar.png" %}"> as url2 %}#}
             <div class="col-sm-offset-10">
                 <ul class="nav nav-pills">
                     <li role="presentation"><a href="{{ url1 }}">Log in</a></li>

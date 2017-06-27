@@ -1,69 +1,126 @@
-from django.db import models
 from django.contrib.auth.models import User
-from django.utils.timezone import now
+from django.core.urlresolvers import reverse
+from django.shortcuts import get_object_or_404
+from django.db import models
 
 
-class QuestionManager(models.Manager):
-    def get_all(self):
-        return self.order_by("creation_date")
+class ProfileManager(models.Manager):
+    def top(self):
+        return self.all().order_by('-rating')
 
-    def get_hot(self):
-        rated_questions = Rating.objects.values_list("question_id").distinct().all()
-        rating_list = []
-        for question in rated_questions:
-            rating_list.append((question[0], Rating.objects.filter(question=question[0]).count()))
-        rating_list.sort(key=lambda tup: tup[1], reverse=True)
-        return [self.filter(pk=r[0]) for r in rating_list]
+    @staticmethod
+    def has(login):
+        exists = True
+        try:
+            User.objects.get(username=login)
+        except User.DoesNotExist:
+            exists = False
+        return exists
 
-    # def get_by_id(self, question_id):
-    #     return self.filter(pk=question_id)[0]
+    def get_profile(self, user):
+        if user.is_anonymous():
+            return None
+        return self.get(user=user)
+
+    def profile_str(self, username):
+        user = get_object_or_404(User, username=username)
+        return self.get_profile(user)
 
 
 class Profile(models.Model):
+    objects = ProfileManager()
     user = models.OneToOneField(User)
-    avatar = models.ImageField(blank=True)
+    about_me = models.TextField(max_length=2000, default="")
+    avatar = models.ImageField(upload_to='uploads/', null=True, default='uploads/newavatar.png')
+    rating = models.IntegerField(default=0)
+    questions_count = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.user.username
 
 
-class Tag(models.Model):
-    name = models.CharField(max_length=15)
-    popularity = models.IntegerField(default=0)
+class QuestionManager(models.Manager):
+    def new(self):
+        return self.all().order_by('-id')
+
+    def popular(self):
+        return self.all().order_by('-rating')
 
 
 class Question(models.Model):
-    title = models.CharField(max_length=255)
-    content = models.TextField()
-    creation_date = models.DateTimeField(default=now())
-    author = models.ForeignKey(Profile)
-    tags = models.ManyToManyField(Tag)
     objects = QuestionManager()
+    title = models.CharField(max_length=255)
+    text = models.TextField()
+    added_at = models.DateTimeField(auto_now_add=True)
+    rating = models.IntegerField(default=0)
+    author = models.ForeignKey(Profile, related_name="question_author")
+    # likes = models.ManyToManyField(Profile, related_name="question_like", blank=True)
+    # dislikes = models.ManyToManyField(Profile, related_name='question_dislike', blank=True)
+    count_answers = models.PositiveIntegerField(default=0)
+    short_text = models.TextField(max_length=85, default="")
 
-    def get_absolute_url(self):
-        return "/question/%d/" % self.pk
-
-    def get_author(self):
-        return self.author.user
-
-    def get_author_avatar(self):
-        return self.author.avatar
+    class Meta:
+        ordering = ('-added_at',)
 
     def get_tags(self):
-        return self.tags.values("pk", "name")
+        return self.tag_set.all()
 
-    def get_n_answers(self):
-        return Answer.objects.filter(question=self.pk).count()
+    def __str__(self):
+        return self.title
 
-    def get_rating(self):
-        return Rating.objects.filter(question=self.pk).count()
+    def get_absolute_url(self):
+        return reverse('question', kwargs={'pk': self.pk})
+
+    @staticmethod
+    def cut_text(text):
+        text = text[:80] + '...'
+        return text
 
 
 class Answer(models.Model):
-    content = models.TextField()
-    creation_date = models.DateTimeField(default=now())
-    author = models.ForeignKey(Profile)
-    question = models.ForeignKey(Question)
+    text = models.TextField()
+    added_at = models.DateTimeField(auto_now_add=True)
+    question = models.ForeignKey(Question, null=False)
+    author = models.ForeignKey(Profile, related_name='answer_author', null=False)
+    rating = models.IntegerField(default=0)
+    # likes = models.ManyToManyField(Profile, related_name="answer_likes", blank=True)
+    # dislikes = models.ManyToManyField(Profile, related_name="answer_dislikes", blank=True)
+
+    def __str__(self):
+        return self.text
 
 
-class Rating(models.Model):
-    user = models.ForeignKey(Profile)
-    question = models.ForeignKey(Question, null=True, blank=True)
-    answer = models.ForeignKey(Answer, null=True, blank=True)
+class TagsManager(models.Manager):
+    def top(self):
+        return self.all().order_by('-counts')
+
+    def add(self, tag_name, question):
+        try:
+            tag = self.get(name=tag_name)
+        except Tag.DoesNotExist:
+            tag = Tag(name=tag_name)
+            tag.save()
+
+        tag.counts += 1
+        tag.questions.add(question)
+        tag.save()
+        return tag
+
+
+class Tag(models.Model):
+    objects = TagsManager()
+    questions = models.ManyToManyField(Question, blank=True)
+    name = models.CharField(max_length=50)
+    counts = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return self.name
+
+
+class Like(models.Model):
+    user = models.ForeignKey('Profile')
+    question = models.ForeignKey('Question')
+    answer = models.ForeignKey('Answer')
+
+    def __str__(self):
+        return 'user "%s" likes "%s" answer' % (self.user, self.answer)
